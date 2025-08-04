@@ -3,6 +3,24 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Garantir que elementos sejam clicáveis por padrão */
+    pointer-events: auto;
+}
+
+/* Correção para overlays invisíveis */
+body > *:not(#loginScreen):not(#registerScreen):not(#mainApp):not(#modalOverlay) {
+    z-index: auto !important;
+}
+
+/* Garantir que modal overlay funcione corretamente */
+#modalOverlay[style*="display: none"] {
+    pointer-events: none !important;
+    z-index: -1 !important;
+}
+
+#modalOverlay:not([style*="display: none"]) {
+    pointer-events: auto !important;
+    z-index: 1000 !important;
 }
 
 body {
