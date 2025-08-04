@@ -219,6 +219,14 @@ class OptmetricsApp {
                 window.AuthMonitoring.trackPageView(sectionName);
             }
             
+            // Registrar no sistema P2P
+            if (window.p2pMonitoring) {
+                window.p2pMonitoring.trackActivity('page_view', {
+                    page: sectionName,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
             // Carregar dados da seção específica
             this.loadSectionData(sectionName);
         }

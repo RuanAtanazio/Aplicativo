@@ -113,6 +113,14 @@ class AuthManager {
                 window.AuthMonitoring.trackLogin(user.username);
             }
             
+            // Registrar atividade no sistema P2P
+            if (window.p2pMonitoring) {
+                window.p2pMonitoring.trackActivity('login', {
+                    userId: user.username,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
             // Log do login - aguardar o admin manager ser inicializado
             setTimeout(() => {
                 if (window.adminManager) {

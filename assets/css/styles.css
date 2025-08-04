@@ -423,6 +423,185 @@ tbody tr:last-child td {
     color: white;
 }
 
+/* Estilos do Sistema P2P */
+.p2p-server-info {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.p2p-server-info h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.status-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.status-item strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.status-online {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.status-offline {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+.client-list, .network-activities {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.client-list h4, .network-activities h4 {
+    margin: 0 0 15px 0;
+    font-size: 1.2em;
+}
+
+.client-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.client-item.online {
+    border-left-color: #00ff88;
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.client-item.offline {
+    border-left-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    opacity: 0.7;
+}
+
+.client-info strong {
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 3px;
+}
+
+.client-details {
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.client-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-indicator.online {
+    background: #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    animation: pulse 2s infinite;
+}
+
+.status-indicator.offline {
+    background: #ff6b6b;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 255, 136, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 136, 0);
+    }
+}
+
+.activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.activity-user {
+    font-weight: bold;
+    min-width: 120px;
+}
+
+.activity-action {
+    flex: 1;
+    margin: 0 15px;
+}
+
+.activity-time {
+    font-size: 0.8em;
+    opacity: 0.8;
+    min-width: 80px;
+    text-align: right;
+}
+
+.network-status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.network-status-badge.connected {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+    border: 1px solid #00ff88;
+}
+
+.network-status-badge.disconnected {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     #mainApp {
