@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Admin Menu</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
+        .btn { background: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        .btn:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+    <h1>Debug - Estado do Usuário Admin</h1>
+    
+    <div class="debug-section">
+        <h3>1. Usuários no LocalStorage:</h3>
+        <pre id="users"></pre>
+    </div>
+    
+    <div class="debug-section">
+        <h3>2. Usuário Atual:</h3>
+        <pre id="currentUser"></pre>
+    </div>
+    
+    <div class="debug-section">
+        <h3>3. Verificação de Admin:</h3>
+        <pre id="adminCheck"></pre>
+    </div>
+    
+    <div class="debug-section">
+        <h3>4. Console Logs:</h3>
+        <pre id="consoleLogs"></pre>
+    </div>
+    
+    <button class="btn" onclick="clearData()">Limpar Dados</button>
+    <button class="btn" onclick="createAdminUser()">Criar Usuário Admin</button>
+    <button class="btn" onclick="loginAsAdmin()">Login como Admin</button>
+    <button class="btn" onclick="createNormalUser()">Criar Usuário Normal</button>
+    <button class="btn" onclick="loginAsUser()">Login como Usuário Normal</button>
+    <button class="btn" onclick="resetAuthSystem()">Resetar Sistema de Auth</button>
+    <button class="btn" onclick="openMainApp()">Abrir App Principal</button>
+    
+    <script>
+        function updateDebugInfo() {
+            // Usuários
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            document.getElementById('users').textContent = JSON.stringify(users, null, 2);
+            
+            // Usuário atual
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            document.getElementById('currentUser').textContent = JSON.stringify(currentUser, null, 2);
+            
+            // Verificação de admin
+            let adminInfo = '';
+            if (currentUser) {
+                const userInArray = users.find(u => u.id === currentUser.id);
+                adminInfo = `Usuário encontrado: ${!!userInArray}\n`;
+                if (userInArray) {
+                    adminInfo += `Role: ${userInArray.role}\n`;
+                    adminInfo += `É admin: ${userInArray.role === 'admin'}\n`;
+                    adminInfo += `Tem permissões: ${!!userInArray.permissions}\n`;
+                    if (userInArray.permissions) {
+                        adminInfo += `Permissões: ${JSON.stringify(userInArray.permissions, null, 2)}`;
+                    }
+                }
+            } else {
+                adminInfo = 'Nenhum usuário logado';
+            }
+            document.getElementById('adminCheck').textContent = adminInfo;
+        }
+        
+        function clearData() {
+            localStorage.clear();
+            updateDebugInfo();
+            alert('Dados limpos!');
+        }
+        
+        function createAdminUser() {
+            const users = [{
+                id: 1,
+                username: 'admin',
+                password: 'admin',
+                role: 'admin',
+                permissions: {
+                    pedidos: { view: true, create: true, edit: true, delete: true },
+                    fornecedores: { view: true, create: true, edit: true, delete: true },
+                    itens: { view: true, create: true, edit: true, delete: true },
+                    precos: { view: true, create: true, edit: true, delete: true }
+                }
+            }];
+            localStorage.setItem('users', JSON.stringify(users));
+            updateDebugInfo();
+            alert('Usuário admin criado com username: admin e password: admin');
+        }
+        
+        function createNormalUser() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const newUser = {
+                id: 2,
+                username: 'usuario',
+                password: 'usuario',
+                role: 'user',
+                permissions: {
+                    pedidos: { view: true, create: true, edit: true, delete: false },
+                    fornecedores: { view: true, create: false, edit: false, delete: false },
+                    itens: { view: true, create: false, edit: false, delete: false },
+                    precos: { view: true, create: false, edit: false, delete: false }
+                }
+            };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            updateDebugInfo();
+            alert('Usuário normal criado com username: usuario e password: usuario');
+        }
+        
+        function loginAsAdmin() {
+            const admin = {
+                id: 1,
+                username: 'admin',
+                role: 'admin'
+            };
+            localStorage.setItem('currentUser', JSON.stringify(admin));
+            updateDebugInfo();
+            alert('Logado como admin! Agora abra a aplicação principal.');
+        }
+        
+        function loginAsUser() {
+            const user = {
+                id: 2,
+                username: 'usuario',
+                role: 'user'
+            };
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            updateDebugInfo();
+            alert('Logado como usuário normal! Agora abra a aplicação principal.');
+        }
+        
+        function openMainApp() {
+            window.open('index.html', '_blank');
+        }
+        
+        function resetAuthSystem() {
+            // Limpar tudo primeiro
+            localStorage.clear();
+            
+            // Criar usuários com senha simples (sem hash)
+            const users = [
+                {
+                    id: 1,
+                    username: 'admin',
+                    password: 'admin',
+                    role: 'admin',
+                    permissions: {
+                        pedidos: { view: true, create: true, edit: true, delete: true },
+                        fornecedores: { view: true, create: true, edit: true, delete: true },
+                        itens: { view: true, create: true, edit: true, delete: true },
+                        precos: { view: true, create: true, edit: true, delete: true },
+                        logs: { view: true },
+                        users: { view: true, create: true, edit: true, delete: true }
+                    },
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 2,
+                    username: 'usuario',
+                    password: 'usuario',
+                    role: 'user',
+                    permissions: {
+                        pedidos: { view: true, create: true, edit: true, delete: false },
+                        fornecedores: { view: true, create: false, edit: false, delete: false },
+                        itens: { view: true, create: false, edit: false, delete: false },
+                        precos: { view: true, create: false, edit: false, delete: false },
+                        logs: { view: false },
+                        users: { view: false, create: false, edit: false, delete: false }
+                    },
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            
+            localStorage.setItem('users', JSON.stringify(users));
+            updateDebugInfo();
+            alert('Sistema de autenticação resetado!\n\nAdmin: admin/admin\nUsuário: usuario/usuario');
+        }
+        
+        // Console override para capturar logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        let logs = [];
+        
+        console.log = function(...args) {
+            logs.push('[LOG] ' + args.join(' '));
+            document.getElementById('consoleLogs').textContent = logs.join('\n');
+            originalLog.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            logs.push('[ERROR] ' + args.join(' '));
+            document.getElementById('consoleLogs').textContent = logs.join('\n');
+            originalError.apply(console, args);
+        };
+        
+        // Executar ao carregar
+        updateDebugInfo();
+        
+        console.log('Debug page loaded');
+        console.log('Current users:', localStorage.getItem('users'));
+        console.log('Current user:', localStorage.getItem('currentUser'));
+    </script>
+</body>
+</html>
