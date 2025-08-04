@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptMetrics Server - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c5aa0;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #2c5aa0;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #2c5aa0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .activity-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-user {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .activity-action {
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .activity-time {
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .activity-computer {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .online-users {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .user-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .user-details {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            background: #28a745;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .refresh-btn {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-bottom: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #1e3d72;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background: #28a745;
+        }
+
+        .status-offline {
+            background: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .online-users {
+                grid-template-columns: 1fr;
+            }
+            
+            .activity-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>OptMetrics Server</h1>
+            <p>Dashboard de Monitoramento Empresarial</p>
+            <p><span class="status-indicator status-online"></span>Servidor Online</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-number" id="totalUsers">0</div>
+                <div class="stat-label">Usuários Únicos</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-number" id="totalActivities">0</div>
+                <div class="stat-label">Total de Atividades</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">💻</div>
+                <div class="stat-number" id="activeComputers">0</div>
+                <div class="stat-label">Computadores Ativos</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🟢</div>
+                <div class="stat-number" id="onlineUsers">0</div>
+                <div class="stat-label">Usuários Online</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Usuários Online</h2>
+            <button class="refresh-btn" onclick="loadData()">🔄 Atualizar</button>
+            <div class="online-users" id="onlineUsersList">
+                <!-- Usuários online serão carregados aqui -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Atividades Recentes</h2>
+            <div class="activity-list" id="recentActivities">
+                <!-- Atividades recentes serão carregadas aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let ws;
+        
+        function connectWebSocket() {
+            try {
+                ws = new WebSocket('ws://localhost:3001');
+                
+                ws.onopen = function() {
+                    console.log('WebSocket conectado');
+                };
+                
+                ws.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'activity') {
+                        loadRecentActivities();
+                        loadStats();
+                    }
+                };
+                
+                ws.onclose = function() {
+                    console.log('WebSocket desconectado. Tentando reconectar...');
+                    setTimeout(connectWebSocket, 5000);
+                };
+                
+                ws.onerror = function(error) {
+                    console.error('Erro WebSocket:', error);
+                };
+            } catch (error) {
+                console.error('Erro ao conectar WebSocket:', error);
+                setTimeout(connectWebSocket, 5000);
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats', {
+                    headers: {
+                        'Company-ID': 'EMPRESA_001'
+                    }
+                });
+                const stats = await response.json();
+                
+                document.getElementById('totalUsers').textContent = stats.uniqueUsers;
+                document.getElementById('totalActivities').textContent = stats.totalActivities;
+                document.getElementById('activeComputers').textContent = stats.activeComputers;
+                document.getElementById('onlineUsers').textContent = stats.onlineUsers;
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+            }
+        }
+
+        async function loadOnlineUsers() {
+            try {
+                const response = await fetch('/api/online-users', {
+                    headers: {
+                        'Company-ID': 'EMPRESA_001'
+                    }
+                });
+                const users = await response.json();
+                
+                const container = document.getElementById('onlineUsersList');
+                
+                if (users.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #666;">Nenhum usuário online no momento</p>';
+                    return;
+                }
+                
+                container.innerHTML = users.map(user => `
+                    <div class="user-card">
+                        <div class="user-name">
+                            <span class="online-indicator"></span>
+                            ${user.userName}
+                        </div>
+                        <div class="user-details">
+                            <div>Computador: ${user.computerName}</div>
+                            <div>Página: ${user.currentPage || 'Desconhecida'}</div>
+                            <div>Última atividade: ${formatDateTime(user.lastSeen)}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar usuários online:', error);
+            }
+        }
+
+        async function loadRecentActivities() {
+            try {
+                const response = await fetch('/api/activities?limit=20', {
+                    headers: {
+                        'Company-ID': 'EMPRESA_001'
+                    }
+                });
+                const activities = await response.json();
+                
+                const container = document.getElementById('recentActivities');
+                
+                if (activities.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #666;">Nenhuma atividade registrada</p>';
+                    return;
+                }
+                
+                container.innerHTML = activities.map(activity => `
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-user">${activity.userName}</div>
+                            <div class="activity-action">${formatAction(activity.action)}</div>
+                            <div class="activity-time">${formatDateTime(activity.timestamp)}</div>
+                        </div>
+                        <div class="activity-computer">${activity.computerName}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar atividades:', error);
+            }
+        }
+
+        function formatAction(action) {
+            const actions = {
+                'login': '🔑 Fez login',
+                'logout': '🚪 Fez logout',
+                'page_view': '👁️ Visualizou página',
+                'data_action': '📝 Ação nos dados',
+                'heartbeat': '💗 Atividade'
+            };
+            return actions[action] || action;
+        }
+
+        function formatDateTime(timestamp) {
+            return new Date(timestamp).toLocaleString('pt-BR');
+        }
+
+        function loadData() {
+            loadStats();
+            loadOnlineUsers();
+            loadRecentActivities();
+        }
+
+        // Inicializar
+        window.addEventListener('load', () => {
+            loadData();
+            connectWebSocket();
+            
+            // Atualizar dados a cada 30 segundos
+            setInterval(loadData, 30000);
+        });
+    </script>
+</body>
+</html>
