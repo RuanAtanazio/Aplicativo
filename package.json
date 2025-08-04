@@ -1,0 +1,35 @@
+{
+  "name": "OptMetrics Compras",
+  "version": "1.0.0",
+  "description": "Sistema de gerenciamento de pedidos de compra para Windows",
+  "main": "index.html",
+  "scripts": {
+    "start": "start index.html",
+    "dev": "start index.html",
+    "build": "echo 'Projeto pronto para produção'",
+    "test": "echo 'Testes não configurados ainda'"
+  },
+  "keywords": [
+    "compras",
+    "pedidos",
+    "fornecedores",
+    "estoque",
+    "precos",
+    "windows"
+  ],
+  "author": "OptMetrics",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RuanAtanazio/Aplicativo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RuanAtanazio/Aplicativo/issues"
+  },
+  "homepage": "https://github.com/RuanAtanazio/Aplicativo#readme"
+}
