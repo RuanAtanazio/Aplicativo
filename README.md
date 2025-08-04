@@ -1,4 +1,40 @@
-# OptMetrics Compras
+# 🛒 OptMetrics Compras - Sistema Empresarial
+
+**Versão 2.0 Empresarial** - Sistema completo de pedidos de compra com monitoramento avançado
+
+---
+
+## 📥 **DOWNLOAD RÁPIDO**
+
+### **🔗 Link Principal:**
+**https://github.com/RuanAtanazio/Aplicativo/archive/refs/heads/main.zip**
+
+### **🔗 Link GitHub:**
+**https://github.com/RuanAtanazio/Aplicativo**
+
+---
+
+## 🆕 **NOVIDADES VERSÃO 2.0**
+
+### ✅ **Sistema de Monitoramento Empresarial**
+- Dashboard administrativo completo
+- Rastreamento de atividades em tempo real  
+- Relatórios detalhados por usuário
+- Exportação CSV/JSON
+
+### ✅ **Servidor Centralizado**
+- Monitoramento de múltiplos computadores
+- Dashboard web: `http://servidor:3000/dashboard`
+- API REST completa
+- WebSocket para tempo real
+
+### ✅ **Recursos Avançados**
+- Sistema de permissões granulares
+- Backup e restauração automática
+- Aplicativo desktop nativo
+- Instalação automatizada
+
+---
 
 Sistema de gerenciamento de pedidos de compra desenvolvido em HTML, CSS e JavaScript para Windows.
 
