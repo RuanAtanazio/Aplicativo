@@ -108,6 +108,11 @@ class AuthManager {
             
             localStorage.setItem('currentUser', JSON.stringify(userData));
             
+            // Registrar login no sistema de monitoramento
+            if (window.AuthMonitoring) {
+                window.AuthMonitoring.trackLogin(user.username);
+            }
+            
             // Log do login - aguardar o admin manager ser inicializado
             setTimeout(() => {
                 if (window.adminManager) {

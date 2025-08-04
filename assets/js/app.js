@@ -98,6 +98,16 @@ class OptmetricsApp {
         if (user.role === 'admin') {
             console.log('Chamando addAdminMenu');
             this.addAdminMenu();
+            
+            // Inicializar painel administrativo avançado
+            if (window.AdvancedAdminPanel) {
+                this.advancedAdminPanel = new AdvancedAdminPanel();
+            }
+        }
+        
+        // Inicializar sistema de monitoramento
+        if (window.monitoringSystem) {
+            window.monitoringSystem.trackAction('page_view', { page: 'dashboard' });
         }
     }
 
@@ -204,6 +214,11 @@ class OptmetricsApp {
         if (targetSection) {
             targetSection.classList.add('active');
             
+            // Registrar visualização da página
+            if (window.AuthMonitoring) {
+                window.AuthMonitoring.trackPageView(sectionName);
+            }
+            
             // Carregar dados da seção específica
             this.loadSectionData(sectionName);
         }
@@ -280,6 +295,11 @@ class OptmetricsApp {
 
     logout() {
         if (confirm('Tem certeza que deseja sair?')) {
+            // Registrar logout no sistema de monitoramento
+            if (window.AuthMonitoring && this.currentUser) {
+                window.AuthMonitoring.trackLogout(this.currentUser.username);
+            }
+            
             localStorage.removeItem('currentUser');
             this.currentUser = null;
             this.showLoginScreen();
